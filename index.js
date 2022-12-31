@@ -51,7 +51,32 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
       try{
         // https://discord.com/developers/docs/resources/channel#create-message
         let res = await discord_api.post(`/channels/${c.id}/messages`,{
-          content:'Yo! I got your slash command. I am not able to respond to DMs just slash commands.',
+          content:'Hi! I got your slash command. I am not able to respond to DMs just slash commands.',
+        })
+        console.log(res.data)
+      }catch(e){
+        console.log(e)
+      }
+
+      return res.send({
+        // https://discord.com/developers/docs/interactions/receiving-and-responding#responding-to-an-interaction
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data:{
+          content:'👍'
+        }
+      });
+    }
+
+      
+    if(interaction.data.name == 'love'){
+      // https://discord.com/developers/docs/resources/user#create-dm
+      let c = (await discord_api.post(`/users/@me/channels`,{
+        recipient_id: interaction.member.user.id
+      })).data
+      try{
+        // https://discord.com/developers/docs/resources/channel#create-message
+        let res = await discord_api.post(`/channels/${c.id}/messages`,{
+          content:'Hi there! I love you!',
         })
         console.log(res.data)
       }catch(e){
@@ -82,6 +107,11 @@ app.get('/register_commands', async (req,res) =>{
     {
       "name": "dm",
       "description": "sends user a DM",
+      "options": []
+    },
+    {
+      "name": "love",
+      "description": "have some love",
       "options": []
     }
   ]

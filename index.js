@@ -1,4 +1,3 @@
-
 // const { clientId, guildId, token, publicKey } = require('./config.json');
 require('dotenv').config()
 const APPLICATION_ID = process.env.APPLICATION_ID 
@@ -133,7 +132,7 @@ app.get('/register_commands', async (req,res) =>{
 
 
 app.get('/', async (req,res) =>{
-  return res.send('Follow documentation ')
+  return res.send('Homepage for the Gaiaswhisper Bot')
 })
 
 

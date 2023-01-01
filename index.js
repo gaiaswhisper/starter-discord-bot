@@ -65,7 +65,6 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
         }
       });
     }
-
       
     if(interaction.data.name == 'love'){
       // https://discord.com/developers/docs/resources/user#create-dm
@@ -90,6 +89,31 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
         }
       });
     }
+
+    if(interaction.data.name == 'resources'){
+      // https://discord.com/developers/docs/resources/user#create-dm
+      let c = (await discord_api.post(`/users/@me/channels`,{
+        recipient_id: interaction.member.user.id
+      })).data
+      try{
+        // https://discord.com/developers/docs/resources/channel#create-message
+        let res = await discord_api.post(`/channels/${c.id}/messages`,{
+          content:'Hi there! Here is a list of resources for self-mastery and starseeds.',
+        })
+        console.log(res.data)
+      }catch(e){
+        console.log(e)
+      }
+
+      return res.send({
+        // https://discord.com/developers/docs/interactions/receiving-and-responding#responding-to-an-interaction
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data:{
+          content:'Starseed resources sent'
+        }
+      });
+    }
+
   }
 
 });
